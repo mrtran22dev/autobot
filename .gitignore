@@ -1,0 +1,20 @@
+# IDE-specific files
+.idea/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# pytest cache
+.pytest_cache/
+
+# Virtual environments
+env/
+venv/
+
+# Others
+.DS_Store
+
+build/
+dist/
