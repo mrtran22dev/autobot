@@ -1,12 +1,8 @@
-Feature: Buy items
+Feature: Target Tests
 
   # ctrl + option + L - re-align gherkin statements
 
-  Scenario: Test scenario
-#    Given user navigates to "snkrs" site "landing" page
-    When custom landing method
-#    When login test method
-
+  @target_checkout
   Scenario: Target - login, add item, checkout
     # goto page + search item
     Given user navigates to "target" site "landing" page
@@ -35,6 +31,7 @@ Feature: Buy items
     And user clicks on the "use_verified_address" button
 
 
+  @target_sort
   Scenario: Target - Product list page sorting and filtering
     Given user navigates to "target" site "landing" page
     Then user should be on the "landing" page of "target" site
@@ -47,6 +44,7 @@ Feature: Buy items
     Then user verifies prices are filtered correctly between "0" to "30"
 
 
+  @target_login
   Scenario Outline: Target - Valid/invalid login accounts
     Given user navigates to "target" site "landing" page
     Then user should be on the "landing" page of "target" site
@@ -65,13 +63,4 @@ Feature: Buy items
       | username              | password     | button |
       | invaliduser@gmail.com | invalid_user | login  |
 
-
-  Scenario: Snkrs - Poll + add item to cart
-    Given user navigates to "https://www.snkrs.com"
-    Then user should be on the "landing" page of "snkrs" site
-#        When user clicks on the "upcoming" button
-#        Then user verifies product should have text "Air Jordan 3 'Black Cement' (DN3707-010) Release Date. Nike SNKRS"
-#        Then user verifies product should have "air_jordan_3" text
-#        Given user login to "snkrs"
-#        When user select size "M 7 / W 8.5" to cart and proceed to checkout
 
