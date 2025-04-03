@@ -45,9 +45,19 @@ def sort_plp_items(page: Page, text_, loc, type_, context):
     prices = page.locator(context.list.items_price).all_inner_texts()
     return prices
 
-@then(parsers.parse('user verifies prices are sorted in "{asc_desc}" order'))
-def price_sort_validation(page: Page, asc_desc, sorted_prices, context):
-    print(sorted_prices)
+@then(parsers.parse('user verifies prices are sorted in "{order}" order'))
+def price_sort_validation(page: Page, order, sorted_prices, context):
+    if order == 'ASC':
+        exp_sort = sorted(sorted_prices, key=lambda x: float(x.replace('$', '')))
+        assert sorted_prices == exp_sort, \
+            f"Prices are not sorted in {order} order: {sorted_prices} != {exp_sort}"
+    elif order == 'DESC':
+        exp_sort = sorted(sorted_prices, key=lambda x: float(x.replace('$', '')), reverse=True)
+        assert sorted_prices == exp_sort, \
+            f"Prices are not sorted in {order} order: {sorted_prices} != {exp_sort}"
+    else:
+        raise Exception(f'sorting order: "{order}" is not a valid sorting order')
+
 
 @when(parsers.parse('user filters the items from price range of "{min_price}" to "{max_price}"'), target_fixture='filtered_prices')
 def filter_plp_items(page: Page, min_price, max_price, context):
@@ -72,9 +82,12 @@ def filter_plp_items(page: Page, min_price, max_price, context):
     prices = page.locator(context.list.items_price).all_inner_texts()
     return prices
 
-@then(parsers.parse('user verifies prices are filtered correctly'))
-def price_sort_validation(page: Page, filtered_prices, context):
-    print(filtered_prices)
+
+@then(parsers.cfparse('user verifies prices are filtered correctly between "{min_price}" to "{max_price}"'))
+def price_sort_validation(page: Page, filtered_prices, min_price, max_price):
+    for price in filtered_prices:
+        assert float(min_price) <= float(price[1:]) <= float(max_price), f'price filter mismatch - price: {price} is not between {min_price}-{max_price}'
+
 
 @when('test cleanup')
 @then('test cleanup')
@@ -157,8 +170,8 @@ def add_item(page: Page, context, bdd_context):
     page.click(context.button.add_to_cart)
     expect(page.locator(context.button.decline_coverage_sidebar)).to_be_visible(timeout=configs.OBJ_TIMEOUT)
     page.click(context.button.decline_coverage_sidebar)
-    navigate_to_page(page, site=context.curr_site, curr_page='checkout', context=context)
-    bdd_context.cleanup.append(f'{context.curr_site}_clear_cart')
+    navigate_to_page(page, site=context.current_site, curr_page='checkout', context=context)
+    bdd_context.cleanup.append(f'{context.current_site}_clear_cart')
 
 
 @when("fills out form based on table", target_fixture="table_data")   # target_fixture here stores datatable values in a fixture named 'users' that can we used in next steps. do not need to declare global viarables

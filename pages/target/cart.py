@@ -1,6 +1,11 @@
+from playwright.sync_api import expect, Page
+from pytest_bdd import parsers
+from config import configs
+
 import types
 from pages import base
 from utils.utils import *
+import logging
 
 
 class CartPage(base.BasePage):
@@ -20,3 +25,9 @@ class CartPage(base.BasePage):
             else:
                 setattr(self.loc, key, val)
         del self.common
+
+
+# @when('custom landing method')
+# def custom_landing_method(page: Page):
+#     logging.info('custom snkrs landing page method')
+#     page.locator('test')

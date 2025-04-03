@@ -1,7 +1,3 @@
-import ast
-import os
-
-from pages.snkrs.landing import LandingPage
 from playwright.sync_api import Page
 from pages import target
 from pages import snkrs
@@ -52,7 +48,7 @@ class PageFactory:
             return page_object(pw_page, locators=target_locators)
         elif site == "snkrs":
             page_map = {
-                "landing": snkrs.landing.LandingPage
+                "landing": snkrs.LandingPage
             }
             try:
                 page_object = page_map[page]

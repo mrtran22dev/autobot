@@ -2,10 +2,6 @@ import pytest
 from pytest_bdd import scenario, given, when, then, parsers
 
 
-# @scenario('../features/buy.feature', 'Poll + add item to cart')
-# def test_buy():
-#     pass
-
 @scenario('../features/buy.feature', 'Target - login, add item, checkout')
 def test_item_checkout():
     pass
@@ -14,9 +10,14 @@ def test_item_checkout():
 def test_plp_sort_filter():
     pass
 
-@scenario('../features/buy.feature', 'Target - Multiple logins')
-def test_multiple_logins():
+@scenario('../features/buy.feature', 'Target - Valid/invalid login accounts')
+def test_login_accounts():
     pass
+
+
+# @scenario('../features/buy.feature', 'Test scenario')
+# def test_login():
+#     pass
 
 
 # @scenario('../features/buy.feature', 'Snkrs - Poll + add item to cart')

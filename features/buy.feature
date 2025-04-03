@@ -1,7 +1,11 @@
 Feature: Buy items
 
-    # ctrl + option + L - re-align gherkin statements
+  # ctrl + option + L - re-align gherkin statements
 
+  Scenario: Test scenario
+#    Given user navigates to "snkrs" site "landing" page
+    When custom landing method
+#    When login test method
 
   Scenario: Target - login, add item, checkout
     # goto page + search item
@@ -29,7 +33,6 @@ Feature: Buy items
       | test       | test      | 1200 lakeshore ave | 94606 | oakland | CA    | 510-555-5555 |
     And user clicks on the "save_continue" button
     And user clicks on the "use_verified_address" button
-#    When user pause test
 
 
   Scenario: Target - Product list page sorting and filtering
@@ -41,11 +44,10 @@ Feature: Buy items
     When user selects by text the "Sort" element of locator "filters" and type "button"
     Then user verifies prices are sorted in "ASC" order
     When user filters the items from price range of "0" to "30"
-    Then user verifies prices are filtered correctly
-    # TODO: complete validation steps to verify sort order + filtering
+    Then user verifies prices are filtered correctly between "0" to "30"
 
 
-  Scenario Outline: Target - Multiple logins
+  Scenario Outline: Target - Valid/invalid login accounts
     Given user navigates to "target" site "landing" page
     Then user should be on the "landing" page of "target" site
     When user clicks on the "sign_in" button
