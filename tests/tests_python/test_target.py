@@ -2,7 +2,7 @@ import pytest
 from pytest_bdd import scenario, given, when, then, parsers
 from config import configs
 
-feature_file = configs.ROOT_DIR + '/tests/features/target_tests.feature'
+feature_file = configs.ROOT_DIR + '/tests/features/test_target.feature'
 
 # @pytest.mark.checkout
 @scenario(feature_file, 'Target - login, add item, checkout')

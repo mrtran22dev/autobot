@@ -1,7 +1,7 @@
 import pytest
 from pytest_bdd import scenario, given, when, then, parsers
 
-feature_file = '../features/temp_tests.feature'
+feature_file = '../features/test_temp.feature'
 
 
 @pytest.mark.snkrs
