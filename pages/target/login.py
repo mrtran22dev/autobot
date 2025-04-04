@@ -32,6 +32,9 @@ def login_to_account(page: Page, user, password, context):
     expect(page.locator(context.input.user)).to_be_visible(timeout=configs.OBJ_TIMEOUT)
     page.wait_for_timeout(500)
     page.fill(context.input.user, user)
+    page.wait_for_timeout(500)
+    if page.locator(context.button.login_continue).is_visible(timeout=500):
+        page.locator(context.button.login_continue).click()
     expect(page.locator(context.input.password)).to_be_visible(timeout=configs.OBJ_TIMEOUT)
     page.wait_for_timeout(500)
     page.fill(context.input.password, password)
@@ -42,8 +45,4 @@ def login_to_account(page: Page, user, password, context):
         page.fill(context.input.password, password)
         page.click(context.button.login)
 
-
-@when(parsers.parse('login test method'))
-def login_to_account(page: Page, context):
-    print('this is a test')
 

@@ -73,6 +73,7 @@ login = {
     },
     'button': {
         'login': '#login',
+        'login_continue': '//button[@id="login" and text()="Continue"]',
     },
     'text': {
         'login_alert': '[data-test="authAlertDisplay"]',

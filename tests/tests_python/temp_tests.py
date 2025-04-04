@@ -1,12 +1,20 @@
 import pytest
 from pytest_bdd import scenario, given, when, then, parsers
 
+feature_file = '../features/temp_tests.feature'
 
-@scenario('../tests/features/temp_tests.feature', 'snkrs landing custom method')
+
+@pytest.mark.snkrs
+@scenario(feature_file, 'snkrs landing custom method')
 def test_snkrs_landing_custom_method():
     pass
 
 
-@scenario('../tests/features/temp_tests.feature', 'Snkrs - Poll + add item to cart')
+@scenario(feature_file, 'walmart landing custom method')
+def test_walmart_landing_custom_method():
+    pass
+
+
+@scenario(feature_file, 'Snkrs - Poll + add item to cart')
 def test_snkrs():
     pass

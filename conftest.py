@@ -1,39 +1,24 @@
 from types import SimpleNamespace
 
 import pytest
-from steps.common import *
 from config import environment
 from playwright.sync_api import Page
+# from utils.cleanup import *
 from utils import cleanup
 import os
 import importlib
-# from pages.snkrs import landing
+
+# loads BDD step definitions
+from steps.common import *
+from pages.snkrs import *
+from pages.walmart import *
 
 
 # BDD statements/methods calls pytest.fixture in conftest.py file
 
-# Site configuration and module imports
-# base_pages_dir = os.path.join(os.path.dirname(__file__), 'pages')
-# site_config = {
-#     # 'target': {'locators': importlib.import_module('locators.target_locators'), 'pages_dir': os.path.join(base_pages_dir, 'target')},
-#     # 'snkrs': {'locators': importlib.import_module('locators.snkrs_locators'), 'pages_dir': os.path.join(base_pages_dir, 'snkrs')}
-#     'target': {'pages_dir': os.path.join(base_pages_dir, 'target')},
-#     'snkrs': {'pages_dir': os.path.join(base_pages_dir, 'snkrs')}
-# }
-#
-# page_modules = {}
-# for site, config in site_config.items():
-#     page_modules[site] = {}
-#     pages_dir = config['pages_dir']
-#     for filename in os.listdir(pages_dir):
-#         if filename.endswith('.py') and filename != '__init__.py':
-#             module_name = filename[:-3]
-#             module = importlib.import_module(f'pages.{site}.{module_name}')
-#             page_modules[site][module_name] = module
-
 @pytest.fixture
 def page() -> Page:
-    logging.info("fixture loaded from conftest.py")
+    logging.info("Page fixture loading from conftest.py")
     yield from environment.browser_context()
 
 
@@ -74,7 +59,6 @@ def pytest_bdd_after_scenario(request, feature, scenario):
     site = request.getfixturevalue('context').current_site
     if bdd_context.cleanup:
         cleanup.teardown_resolver(page, bdd_context, curr_page, site)
-
 
 # # Dynamic fixture creation loop
 # for site, modules in page_modules.items():

@@ -2,11 +2,11 @@ Feature: Test scenarios
 
   # ctrl + option + L - re-align gherkin statements
 
-  @test_snkrs
+  @snkrs
   Scenario: snkrs landing custom method
     When snkrs landing custom method
 
-  @test_walmart
+  @walmart
   Scenario: walmart landing custom method
       When walmart landing custom method
 

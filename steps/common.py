@@ -9,22 +9,40 @@ from pages.target import *
 # methods calls pytest.fixture in conftest.py file first
 
 
-# @then(parsers.parse('user should be on the "{curr_page}" page of "{site}" site'))
-# def validate_page(page: Page, curr_page, site, step_context):
-#     # Fetch locators for the specified site and page
-#     locators = get_locators(site, curr_page)
-#     step_context['locators'] = locators
-#
-#     expect(page.locator(locators['validate']['element'])).to_be_visible()
-#     # Example: Validate presence of an element
-#     # assert page.locator(locators['validate']['element']).is_visible(timeout=15000), "Validation element is not visible"
-#     print(f"Validated locators for page '{curr_page}' on site '{site}'")
-
-
 @when('user pause test')
 @then('user pause test')
 def pause(page: Page, context, bdd_context):
     print('pause test')
+
+
+@given(parsers.parse('user navigates to "{site}" site "{curr_page}" page'))
+@when(parsers.parse('user navigates to "{site}" site "{curr_page}" page'))
+def navigate_to_page(page: Page, site: str, curr_page: str, context):
+    context.current_page = curr_page
+    context.current_site = site
+    url = page_factory.page_navigation(site, curr_page)
+    page.goto(url)
+
+
+@given(parsers.parse('user navigates to "{url}"'))
+def navigate(page: Page, url):
+    logging.info("Navigating to url ...")
+    page.goto(url)
+
+
+@then(parsers.parse('user should be on the "{curr_page}" page of "{site}" site'))
+def validate_page(page: Page, curr_page, site, context):
+    page.wait_for_load_state(state='domcontentloaded')
+    # page.wait_for_load_state(state='networkidle', timeout=configs.OBJ_TIMEOUT)
+    pf = page_factory.PageFactory()
+    page_context = pf.get_page_object(pw_page=page, page=curr_page, site=site)
+    logging.info(f"Validating locators for page '{curr_page}' on site '{site}' ...")
+    for key, value in page_context.loc.__dict__.items():
+        setattr(context, key, value)
+    expect(page.locator(page_context.loc.validate.element)).to_be_visible(timeout=configs.PAGE_TIMEOUT)
+    context.current_page = curr_page
+    context.current_site = site
+    logging.info(f"Validated locators for page '{curr_page}' on site '{site}'")
 
 
 @when(parsers.parse('user selects by text the "{text_}" element of locator "{loc}" and type "{type_}"'), target_fixture='sorted_prices')
@@ -89,44 +107,6 @@ def price_sort_validation(page: Page, filtered_prices, min_price, max_price):
         assert float(min_price) <= float(price[1:]) <= float(max_price), f'price filter mismatch - price: {price} is not between {min_price}-{max_price}'
 
 
-@when('test cleanup')
-@then('test cleanup')
-def cleanup(page: Page, bdd_context):
-    print('cleanup step')
-    print(bdd_context.cleanup)
-    bdd_context.cleanup.append('clear_cart')
-
-
-@given(parsers.parse('user navigates to "{site}" site "{curr_page}" page'))
-@when(parsers.parse('user navigates to "{site}" site "{curr_page}" page'))
-def navigate_to_page(page: Page, site: str, curr_page: str, context):
-    context.current_page = curr_page
-    context.current_site = site
-    url = page_factory.page_navigation(site, curr_page)
-    page.goto(url)
-
-
-@given(parsers.parse('user navigates to "{url}"'))
-def navigate(page: Page, url):
-    logging.info("Navigating to url ...")
-    page.goto(url)
-
-
-@then(parsers.parse('user should be on the "{curr_page}" page of "{site}" site'))
-def validate_page(page: Page, curr_page, site, context):
-    page.wait_for_load_state(state='domcontentloaded')
-    page.wait_for_load_state(state='networkidle')
-    pf = page_factory.PageFactory()
-    page_context = pf.get_page_object(pw_page=page, page=curr_page, site=site)
-    logging.info(f"Validating locators for page '{curr_page}' on site '{site}' ...")
-    for key, value in page_context.loc.__dict__.items():
-        setattr(context, key, value)
-    expect(page.locator(page_context.loc.validate.element)).to_be_visible(timeout=configs.PAGE_TIMEOUT)
-    context.current_page = curr_page
-    context.current_site = site
-    logging.info(f"Validated locators for page '{curr_page}' on site '{site}'")
-
-
 @when(parsers.parse('user clicks on the "{button}" button'))
 def click_button(page: Page, button, context):
     btn = context.button.__dict__
@@ -138,7 +118,7 @@ def click_button(page: Page, button, context):
 def click_butto_if_visible(page: Page, button, context):
     btn = context.button.__dict__
     page.wait_for_load_state(state='domcontentloaded')
-    page.wait_for_load_state(state='networkidle')
+    # page.wait_for_load_state(state='networkidle')
     page.wait_for_timeout(500)
     if page.locator(btn[button]).is_visible(timeout=configs.OBJ_TIMEOUT):
         page.click(btn[button])

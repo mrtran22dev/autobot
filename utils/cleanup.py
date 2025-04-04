@@ -5,7 +5,6 @@ import logging
 from config import configs
 
 
-
 def teardown_resolver(page: Page, bdd_context, curr_page=None, site=None):
     teardowns = {
         'target_clear_cart': clear_cart
